@@ -13,7 +13,7 @@
     "rest",
     "api"
   ],
-  "author": "Ahmet Çetinkaya <amtcetinkaya@outlook.com>",
+  "author": "Ahmet Çetinkaya <ahmetcetinkaya0@outlook.com>",
   "license": "MIT",
   "dependencies": {
     "dotenv": "^8.2.0",
