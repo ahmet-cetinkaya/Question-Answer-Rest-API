@@ -18,10 +18,6 @@ const app = express();
 app.use('/api/', routers);
 
 /// Error Handler
-// app.use((err, req, res, next) => {
-//   console.log('Custom Error Handle');
-//   res.status(400).json({ success: false });
-// });
 app.use(customErrorHandler);
 
 app.listen(PORT, () => {
