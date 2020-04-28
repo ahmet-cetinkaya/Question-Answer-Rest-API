@@ -5,7 +5,7 @@ const UserSchema = new Schema({
   name: { type: String, required: [true, 'Please provide a name'] },
   email: {
     type: String,
-    required: true,
+    required: [true, 'Please provide a email'],
     unique: [true, 'Please try different email'],
     match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Please provide a valid email'],
   }, // https://stackoverflow.com/questions/18022365/mongoose-validate-email-syntax
