@@ -15,11 +15,14 @@ const register = asyncErrorWrapper(async (req, res, next) => {
   sendJwtToClient(user, res);
 });
 
-const tokentest = (req, res, next) => {
+const getUser = (req, res, next) => {
   res.json({
     success: true,
-    message: 'Welcome',
+    data: {
+      id: req.user.id,
+      name: req.user.name,
+    },
   });
 };
 
-module.exports = { register, tokentest };
+module.exports = { register, getUser };
