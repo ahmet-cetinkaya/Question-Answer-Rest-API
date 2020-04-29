@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -7,10 +8,10 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: [true, 'Please provide a email'],
-    unique: [true, 'Please try different email'],
+    unique: true,
     match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Please provide a valid email'],
-  }, // https://stackoverflow.com/questions/18022365/mongoose-validate-email-syntax
-  role: { type: String, default: 'user', enum: ['user', 'admin'] }, // enum: belirli verilerden olabileceğini belirtiriz.
+  },
+  role: { type: String, default: 'user', enum: ['user', 'admin'] },
   password: {
     type: String,
     minlength: 6,
@@ -42,7 +43,18 @@ const UserSchema = new Schema({
     default: false,
   },
 });
+/// UserSchema Methods
+UserSchema.methods.generateJwtFromUser = function () {
+  const { JWT_SECRET_KEY, JWT_EXPIRE } = process.env;
+  const payload = {
+    id: this._id,
+    name: this.name,
+  };
+  const token = jwt.sign(payload, JWT_SECRET_KEY, { expiresIn: JWT_EXPIRE });
+  return token;
+};
 
+/// Pre Hooks
 UserSchema.pre('save', function (next) {
   if (!this.isModified('password')) next();
 
