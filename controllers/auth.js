@@ -52,4 +52,18 @@ const getUser = (req, res, next) => {
   });
 };
 
-module.exports = { register, getUser, login, logout };
+// Forgot Password
+const forgotpassword = asyncErrorWrapper(async (req, res, next) => {
+  const resetEmail = req.body.email;
+  const user = await User.findOne({ email: resetEmail });
+  if (!user) {
+    return next(new CustomError('There is no user with this email', 400));
+  }
+  const resetPasswordToken = user.getResetPasswordTokenFromUser();
+
+  await user.save();
+
+  res.json({ success: true, message: 'Token Sent To Your Email' });
+});
+
+module.exports = { register, getUser, login, logout, forgotpassword };
