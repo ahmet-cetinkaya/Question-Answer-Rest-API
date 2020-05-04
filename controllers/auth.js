@@ -53,6 +53,22 @@ const getUser = (req, res, next) => {
   });
 };
 
+const imageUpload = asyncErrorWrapper(async (req, res, next) => {
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    {
+      profile_image: req.savedProfileImage,
+    },
+    { new: true, runValidators: true }
+  );
+
+  res.status(200).json({
+    success: true,
+    message: 'Image Upload Successfully',
+    data: user,
+  });
+});
+
 // Forgot Password
 const forgotpassword = asyncErrorWrapper(async (req, res, next) => {
   const resetEmail = req.body.email;
@@ -112,4 +128,4 @@ const resetPassword = asyncErrorWrapper(async (req, res, next) => {
   return res.status(200).json({ success: true, message: 'Reset Password Process Successfully' });
 });
 
-module.exports = { register, getUser, login, logout, forgotpassword, resetPassword };
+module.exports = { register, getUser, login, logout, imageUpload, forgotpassword, resetPassword };
