@@ -30,4 +30,16 @@ const getSingleQuestion = async (req, res, next) => {
   });
 };
 
-module.exports = { askNewQuestion, getAllQuestions, getSingleQuestion };
+const editQuestion = asyncErrorWrapper(async (req, res, next) => {
+  const { id } = req.params;
+  const information = req.body;
+
+  const question = await Question.findByIdAndUpdate(id, information, {
+    new: true,
+    runValidators: true,
+  });
+
+  return res.status(200).json({ success: true, data: question });
+});
+
+module.exports = { askNewQuestion, getAllQuestions, getSingleQuestion, editQuestion };
