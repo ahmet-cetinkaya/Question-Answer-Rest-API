@@ -4,7 +4,6 @@ const asyncErrorWrapper = require('express-async-handler');
 
 const askNewQuestion = asyncErrorWrapper(async (req, res, next) => {
   const information = req.body;
-  console.log(`!: askNewQuestion -> information`, information);
 
   const question = await Question.create({
     ...information,
@@ -22,4 +21,13 @@ const getAllQuestions = async (req, res, next) => {
   });
 };
 
-module.exports = { askNewQuestion, getAllQuestions };
+const getSingleQuestion = async (req, res, next) => {
+  const { id } = req.params;
+  const question = await Question.findById(id);
+  return res.status(200).json({
+    success: true,
+    data: question,
+  });
+};
+
+module.exports = { askNewQuestion, getAllQuestions, getSingleQuestion };
