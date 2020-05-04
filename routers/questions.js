@@ -4,6 +4,7 @@ const {
   getAllQuestions,
   getSingleQuestion,
   editQuestion,
+  deleteQuestion,
 } = require('../controllers/question');
 const { getAccessToRoute, getQuestionOwnerAccess } = require('../middlewares/authorization/auth');
 const { checkQuestionExist } = require('../middlewares/database/databaseErrorHelpers');
@@ -17,5 +18,9 @@ router.put(
   [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess],
   editQuestion
 );
-
+router.delete(
+  '/:id/delete',
+  [getAccessToRoute, checkQuestionExist, getQuestionOwnerAccess],
+  deleteQuestion
+);
 module.exports = router;
