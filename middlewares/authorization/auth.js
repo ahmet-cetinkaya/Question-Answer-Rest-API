@@ -41,12 +41,6 @@ const getQuestionOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
   const userId = req.user.id;
   const questionId = req.params.id;
   const question = await Question.findById(questionId);
-  console.log(
-    `!: getQuestionOwnerAccess -> question.user !== userId`,
-    userId,
-    question.user,
-    question.user != userId
-  );
   if (question.user != userId) {
     return next(new CustomError('Only owner can handle this operation', 403));
   }
