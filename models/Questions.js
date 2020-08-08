@@ -24,6 +24,7 @@ const QuestionSchema = new Schema({
     ref: 'User',
   },
   likes: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
+  answers: [{ type: mongoose.Schema.ObjectId, ref: 'Answer' }],
 });
 
 QuestionSchema.pre('save', function (next) {
