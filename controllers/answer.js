@@ -17,11 +17,20 @@ const addNewAnswerToQuestion = asyncErrorWrapper(async (req, res, next) => {
 
 const getAllAnswerByQuestion = asyncErrorWrapper(async (req, res, next) => {
   const { question_id } = req.params;
-
   const question = await Questions.findById(question_id).populate('answers');
   const answers = question.answers;
-
   return res.status(200).json({ success: true, count: answers.length, data: answers });
 });
 
-module.exports = { addNewAnswerToQuestion, getAllAnswerByQuestion };
+const getSingleAnswer = asyncErrorWrapper(async (req, res, next) => {
+  const { answer_id } = req.params;
+  const answer = await Answer.findById(answer_id)
+    .populate({
+      path: 'question',
+      select: 'title',
+    })
+    .populate({ path: 'user', select: 'name profile_image' });
+  return res.status(200).json({ success: true, data: answer });
+});
+
+module.exports = { addNewAnswerToQuestion, getAllAnswerByQuestion, getSingleAnswer };
