@@ -7,6 +7,7 @@ const {
   getAccessTokenFromHeader,
 } = require('../../helpers/authorization/tokenHelpers');
 const Question = require('../../models/Questions');
+const Answer = require('../../models/Answer');
 
 const getAccessToRoute = (req, res, next) => {
   if (!isTokenIncluded(req)) {
@@ -47,4 +48,14 @@ const getQuestionOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
   next();
 });
 
-module.exports = { getAccessToRoute, getAdminAccess, getQuestionOwnerAccess };
+const getAnswerOwnerAccess = asyncErrorWrapper(async (req, res, next) => {
+  const userId = req.user.id;
+  const answerId = req.params.answer_id;
+  const answer = await Answer.findById(answerId);
+  if (answer.user != userId) {
+    return next(new CustomError('Only owner can handle this operation', 403));
+  }
+  next();
+});
+
+module.exports = { getAccessToRoute, getAdminAccess, getQuestionOwnerAccess, getAnswerOwnerAccess };
