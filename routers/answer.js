@@ -8,6 +8,8 @@ const {
   getSingleAnswer,
   editAnswer,
   deleteAnswer,
+  likeAnswer,
+  undoLikeAnswer,
 } = require('../controllers/answer');
 
 router.post('/', getAccessToRoute, addNewAnswerToQuestion);
@@ -23,4 +25,11 @@ router.delete(
   [checkQuestionAndAnswerExists, getAccessToRoute, getAnswerOwnerAccess],
   deleteAnswer
 );
+router.get('/:answer_id/like', [checkQuestionAndAnswerExists, getAccessToRoute], likeAnswer);
+router.get(
+  '/:answer_id/undo_like',
+  [checkQuestionAndAnswerExists, getAccessToRoute],
+  undoLikeAnswer
+);
+
 module.exports = router;

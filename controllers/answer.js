@@ -52,10 +52,34 @@ const deleteAnswer = asyncErrorWrapper(async (req, res, next) => {
   return res.status(200).json({ success: true, data: 'Answer deleted successfully.' });
 });
 
+const likeAnswer = asyncErrorWrapper(async (req, res, next) => {
+  const { answer_id } = req.params;
+  const answer = await Answer.findById(answer_id);
+  if (answer.likes.includes(req.user.id)) {
+    return next(new CustomError('You already liked this answer', 400));
+  }
+  answer.likes.push(req.user.id);
+  answer.save();
+  return res.status(200).json({ success: true, data: answer });
+});
+
+const undoLikeAnswer = asyncErrorWrapper(async (req, res, next) => {
+  const { answer_id } = req.params;
+  const answer = await Answer.findById(answer_id);
+  if (!answer.likes.includes(req.user.id)) {
+    return next(new CustomError('You cannot undo like operation for this question.', 400));
+  }
+  answer.likes.splice(answer.likes.indexOf(req.user.id), 1);
+  answer.save();
+  return res.status(200).json({ success: true, data: answer });
+});
+
 module.exports = {
   addNewAnswerToQuestion,
   getAllAnswerByQuestion,
   getSingleAnswer,
   editAnswer,
   deleteAnswer,
+  likeAnswer,
+  undoLikeAnswer,
 };

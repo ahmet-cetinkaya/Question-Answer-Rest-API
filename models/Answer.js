@@ -9,10 +9,7 @@ const AnswerSchema = new Schema({
     minlength: [10, 'Please provide a content at least 10 characters'],
   },
   createdAt: { type: Date, default: Date.now },
-  likes: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-  },
+  likes: [{ type: mongoose.Schema.ObjectId, ref: 'User' }],
   question: {
     type: mongoose.Schema.ObjectId,
     ref: 'Question',
