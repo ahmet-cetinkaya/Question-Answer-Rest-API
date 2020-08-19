@@ -42,4 +42,20 @@ const editAnswer = asyncErrorWrapper(async (req, res, next) => {
   return res.status(200).json({ success: true, data: answer });
 });
 
-module.exports = { addNewAnswerToQuestion, getAllAnswerByQuestion, getSingleAnswer, editAnswer };
+const deleteAnswer = asyncErrorWrapper(async (req, res, next) => {
+  const { answer_id } = req.params;
+  const { question_id } = req.params;
+  await Answer.findByIdAndRemove(answer_id);
+  const question = await Questions.findById(question_id);
+  question.answers.splice(question.answers.indexOf(answer_id), 1);
+  await question.save();
+  return res.status(200).json({ success: true, data: 'Answer deleted successfully.' });
+});
+
+module.exports = {
+  addNewAnswerToQuestion,
+  getAllAnswerByQuestion,
+  getSingleAnswer,
+  editAnswer,
+  deleteAnswer,
+};

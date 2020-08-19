@@ -7,6 +7,7 @@ const {
   getAllAnswerByQuestion,
   getSingleAnswer,
   editAnswer,
+  deleteAnswer,
 } = require('../controllers/answer');
 
 router.post('/', getAccessToRoute, addNewAnswerToQuestion);
@@ -17,5 +18,9 @@ router.put(
   [checkQuestionAndAnswerExists, getAccessToRoute, getAnswerOwnerAccess],
   editAnswer
 );
-
+router.delete(
+  '/:answer_id/delete',
+  [checkQuestionAndAnswerExists, getAccessToRoute, getAnswerOwnerAccess],
+  deleteAnswer
+);
 module.exports = router;
