@@ -27,6 +27,7 @@ AnswerSchema.pre('save', async function (next) {
   try {
     const question = await Questions.findById(this.question);
     question.answers.push(this._id);
+    question.answerCount = question.answers.length;
     await question.save();
     next();
   } catch (err) {
