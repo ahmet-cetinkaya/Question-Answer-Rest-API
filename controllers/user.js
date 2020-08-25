@@ -9,8 +9,7 @@ const getSingleUser = asyncErrorWrapper(async (req, res, next) => {
 });
 
 const getAllUser = asyncErrorWrapper(async (req, res, next) => {
-  const users = await User.find();
-  return res.status(200).json({ success: true, data: users });
+  return res.status(200).json(res.queryResults);
 });
 
 module.exports = { getSingleUser, getAllUser };
