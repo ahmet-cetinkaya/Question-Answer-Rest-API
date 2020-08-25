@@ -1,6 +1,5 @@
 const express = require('express');
 const answer = require('./answer');
-
 const {
   askNewQuestion,
   getAllQuestions,
@@ -12,9 +11,22 @@ const {
 } = require('../controllers/question');
 const { getAccessToRoute, getQuestionOwnerAccess } = require('../middlewares/authorization/auth');
 const { checkQuestionExist } = require('../middlewares/database/databaseErrorHelpers');
+
+const Questions = require('../models/Questions');
+const questionQueryMiddleware = require('../middlewares/query/questionQueryMiddleware');
+
 const router = express.Router();
 
-router.get('/', getAllQuestions);
+router.get(
+  '/',
+  questionQueryMiddleware(Questions, {
+    population: {
+      path: 'user',
+      select: 'name profile_image',
+    },
+  }),
+  getAllQuestions
+);
 router.get('/:id', checkQuestionExist, getSingleQuestion);
 router.get('/:id/like', [getAccessToRoute, checkQuestionExist], likeQuestion);
 router.get('/:id/undo_like', [getAccessToRoute, checkQuestionExist], undoLikeQuestion);
