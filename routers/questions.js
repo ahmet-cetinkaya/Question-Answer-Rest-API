@@ -14,6 +14,7 @@ const { checkQuestionExist } = require('../middlewares/database/databaseErrorHel
 
 const Questions = require('../models/Questions');
 const questionQueryMiddleware = require('../middlewares/query/questionQueryMiddleware');
+const answerQueryMiddleware = require('../middlewares/query/answerQueryMiddleware');
 
 const router = express.Router();
 
@@ -27,7 +28,23 @@ router.get(
   }),
   getAllQuestions
 );
-router.get('/:id', checkQuestionExist, getSingleQuestion);
+router.get(
+  '/:id',
+  checkQuestionExist,
+  answerQueryMiddleware(Questions, {
+    population: [
+      {
+        path: 'user',
+        select: 'name profile_image',
+      },
+      {
+        path: 'answers',
+        select: 'content',
+      },
+    ],
+  }),
+  getSingleQuestion
+);
 router.get('/:id/like', [getAccessToRoute, checkQuestionExist], likeQuestion);
 router.get('/:id/undo_like', [getAccessToRoute, checkQuestionExist], undoLikeQuestion);
 router.post('/ask', getAccessToRoute, askNewQuestion);

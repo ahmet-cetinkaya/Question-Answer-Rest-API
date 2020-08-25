@@ -19,12 +19,8 @@ const getAllQuestions = async (req, res, next) => {
 };
 
 const getSingleQuestion = async (req, res, next) => {
-  const { id } = req.params;
-  const question = await Question.findById(id);
-  return res.status(200).json({
-    success: true,
-    data: question,
-  });
+  console.log(`!: getSingleQuestion -> res.queryResults`, res.queryResults);
+  return res.status(200).json(res.queryResults);
 };
 
 const editQuestion = asyncErrorWrapper(async (req, res, next) => {
